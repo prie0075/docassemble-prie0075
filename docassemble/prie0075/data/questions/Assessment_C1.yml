@@ -1,0 +1,134 @@
+---
+objects:
+  # Set up endpoints
+  - endpoint: DADict
+---
+# Welcome screen
+mandatory: true
+question: Welcome!
+subquestion: |
+  This application completes a Federal Court Form 1 document
+  
+  ***Disclaimer:***
+  **This advice is not to be taken as genuine legal advice and is not a substitute
+  for you seeking independent legal advice. The resulting form must be checked
+  by a lawyer**
+  
+  If you continue you accept these terms.
+buttons:
+  - "I accept and want to continue": continue
+  - "I do not accept": exit
+    url: courts.sa.gov.au
+---
+mandatory: True
+code: |
+  if ADPcourt_ok:
+    endpoint['applicable']
+  else:
+    endpoint['inapplicable']
+---
+code: |
+  if ADPcourt in ['Federal Court', 'Federal Circuit Court']:
+    ADPcourt_ok = True
+  else:
+    ADPcourt_ok = False
+---
+question: What court is the application for?
+fields:
+  - no label: ADPcourt
+    datatype: dropdown
+    choices:
+      - Supreme Court
+      - District Court
+      - Magistrates Court
+      - Federal Court
+      - Federal Circuit Court
+---
+# The inapplicable endpoint
+event: endpoint['inapplicable']
+question: Form assistant inapplicable
+subquestion: |
+  It appears this form assistant is not applicable to your needs.
+  It can only prepare forms for FCA and FCCT.
+  
+  Please contact bla bla bla for more assistance
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+# The applicable endpoint
+event: endpoint['applicable']
+question: Form complete
+subquestion: |
+  Questions asked:
+  
+  Information|Your input
+  -----------|----------
+  Court             |${ADPcourt}
+  Division          |${ADPdivision}
+  First applicant   |${ADPfirst_applicant}
+  First respondent  |${ADPfirst_respondent}
+  State             |${ADPstate}
+  Date              |${ADPdate}
+  Signed by         |${ADPsignatory}
+  Signed in capacity|${ADPsignatory_capacity}
+  Comments          |${ADPcomments}
+attachment:
+  docx template file: FCA_form001_20110801.docx
+  name: Court application form
+  filename: Court-application-form
+  valid formats:
+  - pdf
+---
+code: |
+  ADPtitle = ADPfirst_applicant + ' vs ' + ADPfirst_respondent
+---
+question: What state? (unknown if state of applicant/respondent/case/courthouse/etc, or whether territories are allowed)
+fields:
+  - no label: ADPstate
+    datatype: dropdown
+    choices:
+      - South Australia
+      - Victoria
+      - Western Australia
+      - New Sourth Wales
+      - Tasmania
+      - Queensland
+---
+question: Court division
+fields:
+  - no label: ADPdivision
+    datatype: dropdown
+    choices:
+      - Corporations
+      - Criminal
+      - Employment
+      - General
+---
+question: Who is the first applicant?
+fields:
+ - Individual/organisation full name: ADPfirst_applicant
+---
+question: Who is the first respondent?
+fields:
+ - Individual/organisation full name: ADPfirst_respondent
+---
+question: What is the date of the application?
+fields:
+  - no label: ADPdate
+    datatype: date
+---
+question: Who is signing the application?
+fields:
+  - Full name: ADPsignatory
+  - ${''}{Capacity}: ADPsignatory_capacity
+  # The ${''} is a workaround to allow the whole field to be marked as a term
+terms:
+  Capacity: |
+    E.g. 'Applicant', 'Respondent', 'Lawyer for the Applicant'
+---
+question: Any further comments to be inserted into the form?
+fields:
+  - no label: ADPcomments
+    required: False
+---
