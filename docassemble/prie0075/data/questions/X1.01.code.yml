@@ -1,0 +1,10 @@
+---
+code: |
+  if ADPsue_reason == 'ADPpromisor':
+    ADPcertainty = ADPpromisor_certainty
+  elif ADPsue_reason == 'ADPpromisee':
+    ADPcertainty = ADPpromisee_certainty
+  else:
+    error_message = 'Unknown value in ADPsue_reason: {}'.format(ADPsue_reason)
+    endpoints['error_screen']
+---

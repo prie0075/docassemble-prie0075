@@ -1,0 +1,18 @@
+---
+# Stores the description of the work that was requested
+question: Describe the work you wanted done
+fields:
+  - no label: ADPpromisee_work_requested
+    datatype: area
+---
+# Test for Offer and Acceptance
+# This code is going to ask two questions to make sure that
+question: Did the other person agree to do this work?
+fields:
+  - no label: ADPpromisee_certainty
+    datatype: radio
+    choices:
+      - Yes. The other person agreed to do exactly this work: ADPagree_exact
+      - Yes. The other person agreed to do some of this work but there was other work that was not agreed to that wasn't done: ADPagree_inexact
+      - No. The other person did not agree to do this work or all of this work: ADPdisagree
+---
