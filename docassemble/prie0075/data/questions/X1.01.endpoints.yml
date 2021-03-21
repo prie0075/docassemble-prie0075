@@ -35,10 +35,10 @@ buttons:
 event: endpoints['final_screen']
 question: Breach of Contract App
 subquestion: |
-  % if MJFcontract_exists:
-  ${ MJFcontract_exists_template }
+  % if ADPcontract_exists:
+  ${ ADPcontract_exists_template }
   % else:
-  ${ MJFnot_contract_exists_template }
+  ${ ADPnot_contract_exists_template }
   % endif
 buttons:
   - Restart: restart
@@ -46,7 +46,7 @@ buttons:
 ---
 # Text to display explaining that a written contract is not necessary
 # when suing for breach of contract.
-template: MJFwritten_contract_template
+template: ADPwritten_contract_template
 content: |
   **You do not need to write your contract down to prove you have a contract.**
 
@@ -64,7 +64,7 @@ content: |
   promises ever existed.
 ---
 # What to display if the app determines a contract exists.
-template: MJFcontract_exists_template
+template: ADPcontract_exists_template
 content: |
   Based on your responses, 
   you **may be able to sue** for breach of contract.
@@ -72,11 +72,11 @@ content: |
   You should seek legal advice.  Collect any evidence about the 
   contract that you might have, such as text message, phone call logs,
   diary entries and so-on.
-  % if MJFwritten_contract:
+  % if ADPwritten_contract:
   Be sure to include evidence of your written contract.
   % else: 
 
-  ${ MJFwritten_contract_template }
+  ${ ADPwritten_contract_template }
   % endif
 ---
 # What to display it the app determines a contract doesn't exist.  This
@@ -84,7 +84,7 @@ content: |
 # we need to explain why the user can't sue.  The reasons why will
 # depend on the user's responses to any of the contract law questions
 # that we asked.
-template: MJFnot_contract_exists_template
+template: ADPnot_contract_exists_template
 content: |
   Based on your responses, you **may not be able to sue** for 
   breach of contract.
@@ -93,14 +93,14 @@ content: |
 
   Based on your responses:
   
-  % if MJFcertainty != 'MJFagree_exact':
+  % if ADPcertainty != 'ADPagree_exact':
   - You and the other person did not agree to do this work, or all of this work,
     or there was other work done that was not agreed to.
   % endif
-  % if not MJFconsideration:
+  % if not ADPconsideration:
   - You never reached a firm agreement on how much to pay for the work done.
   % endif
-  % if not MJFcapacity:
+  % if not ADPcapacity:
   - The other person was under 18.  It is possible in some circumstances to enter into
     a contract with people under 18.  You should seek legal advice about whether your
     situation meets these circumstances.
@@ -115,6 +115,6 @@ content: |
     both should be over 18 years old.  You need to seek legal advice if one or both of
     you is under 18.
 
-  % if not MJFwritten_contract:
-  ${ MJFwritten_contract_template }
+  % if not ADPwritten_contract:
+  ${ ADPwritten_contract_template }
   % endif
