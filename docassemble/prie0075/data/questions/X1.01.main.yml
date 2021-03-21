@@ -21,6 +21,9 @@
 # into multiple files (see the B1.01 video for more info)
 include:
   - X1.01.questions.yml
+  - X1.01.promisee-questions.yml
+  - X1.01.promisor-questions.yml
+  - X1.01.code.yml
   - X1.01.endpoints.yml
 ---
 # We start off with a 'Welcome screen'.  Students should 
@@ -33,19 +36,16 @@ include:
 mandatory: True
 question: Breach of Contract App
 subquestion: |
-  This is the first or 'Welcome' screen that the user
-  sees when they run the app.  This screen should describe
-  what the app does to the user.
+  Welcome! This is a service to help you determine whether you
+  are eligible to sue for a breach of contract, e.g. for work
+  you paid for but which wasn't done, or for work you did
+  but weren't paid for
+  
+  ***Disclaimer:***  
+  **This advice is not to be taken as genuine legal advice and is not a substitute
+  for you seeking independent legal advice.**
 
-  The screen may also need to include a disclaimer, particularly
-  as this app is providing legal advice.
-
-  The screen should contain a click-through agreement indicating
-  the user agrees to the disclaimer and any other terms before
-  proceeding.
-
-  The screen should also give the user the option to exit the
-  app at this point
+  If you continue you accept these terms.
 buttons:
   - I agree and wish to continue: continue
   - I do not agree and wish to exit: exit
@@ -63,14 +63,32 @@ code: |
   # We need to split off here depending on what the user
   # answered
   if ADPsue_reason == 'ADPpromisor':
-    # Students will need to put logic in here
-    # for the promisor part of the code
-    pass
+    # This is left side of the flowchart.
+    
+    # Define some shortcuts
+    ADPpayment_phrase = "be paid"
+    
+    # First we ask the prelimiary questions
+    ADPpromisor_work_requested
+    ADPpayment_agreed
+    
+    # Now we ask 5, or maybe 4, or maybe 3 things, the number seems to be unclear:
+    if ADPpromisor_certainty == 'ADPagree_exact' and ADPconsideration == True and ADPcapacity == True:
+      ADPcontract_exists = True
+    else:
+      ADPcontract_exists = False
+
+    # Now we know whether there is a contract or not we can display
+    # the final screen that contains a result and an explanation of why
+    endpoints['final_screen']
   elif ADPsue_reason == 'ADPpromisee':
     # This is right side of the flowchart.  Off we go!
 
+    # Define some shortcuts
+    ADPpayment_phrase = "pay"
+
     # First we ask the prelimiary questions
-    ADPwork_requested
+    ADPpromisee_work_requested
     ADPpayment_agreed
     
     # Now we can implement contract law as code.  Contract law
@@ -89,7 +107,7 @@ code: |
     # many ANDs joined together, python evaluates them left to right
     # and stops as soon as it finds a False.  We can use this property
     # to control how many questions we ask
-    if ADPcertainty == 'ADPagree_exact' and ADPconsideration == True and ADPcapacity == True:
+    if ADPpromisee_certainty == 'ADPagree_exact' and ADPconsideration == True and ADPcapacity == True:
       ADPcontract_exists = True
     else:
       ADPcontract_exists = False

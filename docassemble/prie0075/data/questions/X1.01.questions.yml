@@ -1,4 +1,4 @@
-# We put all the question block into this file.  We do 
+# We put all the common question block into this file.  We do 
 # this simply to be organised.  We want to separate the
 # actual questions we ask from the logic flow of the program
 # itself (which is in the main file).  That way it makes
@@ -20,46 +20,32 @@ fields:
     datatype: radio
     choices:
       - I paid for work that wasn't done: ADPpromisee
-      - Someody didn't pay me for work that I did: ADPpromisor
----
-# Stores the description of the work that was requested
-question: Describe the work you wanted done
-fields:
-  - no label: ADPwork_requested
-    datatype: area
+      - Somebody didn't pay me for work that I did: ADPpromisor
 ---
 # We ask the two payment questions in a single question block
+# > I've assumed the 'two payment questions' here are the questions from the promisor and promisee's perspectives
 question: Payment
 fields:
-  - How much did you agree to pay for this work?: ADPpayment_agreed
+  - How much did you agree to ${ADPpayment_phrase} for this work?: ADPpayment_agreed
     datatype: currency
     min: 0
 under: |
+  % if ADPsue_reason == 'ADPpromisee':
   If you have not yet paid anything, just leave the default value of $0.00
----
-# Test for Offer and Acceptance
-# This code is going to ask two questions to make sure that
-question: Did the other person agree to do this work?
-fields:
-  - no label: ADPcertainty
-    datatype: radio
-    choices:
-      - Yes. The other person agreed to do exactly this work: ADPagree_exact
-      - Yes. The other person agreed to do some of this work but there was other work that was not agreed to that wasn't done: ADPagree_inexact
-      - No. The other person did not agree to do this work or all of this work: ADPdisagree
+  % endif
 ---
 # Test for Consideration (and Certainty)
 # Because this is a Yes/No answer we store the results as boolean (ie: True/False)
 # values.  For more information on booleans check out C2.01 video.
 question: Payment for the Work
 subquestion: |
-  Did you and the other person agree how much you would pay for the work?
+  Did you and the other person agree how much would be paid for the work?
 fields:
   - no label: ADPconsideration
     datatype: radio
     choices:
       - Yes, we agreed to pay ${ currency(ADPpayment_agreed) } for the work: True
-      - No, we never reached a firm agreement on how much I should pay: False
+      - No, we never reached a firm agreement on how should be paid: False
 ---
 # Just to mix things up, we use a 'yesno' field to ask whether the other person
 # had capacity.  We are reducing 'capacity' in this app to just being an adult.
