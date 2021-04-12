@@ -65,32 +65,47 @@ event: endpoints['final_screen']
 question: ""
 subquestion:  |
   % if HAApets:
-  ### Services for Pets
-
-  The agencies listed here will not accept pets.
-  
-  Contact these agencies to discuss alternative 
-  care options for your pet.
-
-  %for HAAdisplay_entry in HAAdisplay_pets:
-  ${ HAAdisplay_entry['display_record'].show() }
-  %endfor  
+    <h3>Services for Pets</h3>
+    
+    The agencies listed further down will not accept pets.
+    
+    Contact these agencies to discuss alternative 
+    care options for your pet.
+    
+    <div class="ADP-services-list">
+      %for HAAdisplay_entry in HAAdisplay_pets:
+        ${ HAAdisplay_entry['display_record'].content_as_html() }
+      %endfor
+    </div>
   % endif
-  
 
   % if HAAfamily == 'Single':
-  ### Services for you
+    <h3>Services for you</h3>
   % else:
-  ### Services for You and Your Family
+    <h3>Services for You and Your Family</h3>
   % endif
   
   Based on your answers, you might be eligible for support from the following agencies.
 
-  You should contact them as soon as you can to try an arrange emergency housing.
+  You should contact them as soon as you can to try and arrange emergency housing.
   
-  %for HAAdisplay_entry in HAAdisplay_other:
-  ${ HAAdisplay_entry['display_record'].show() }
-  %endfor
+  %if len(ADPdisplay_atsi) > 0:
+    <h4>Services for First Nations people</h4>
+    
+    <div class="ADP-services-list">
+      %for HAAdisplay_entry in ADPdisplay_atsi:
+        ${ HAAdisplay_entry['display_record'].content_as_html() }
+      %endfor
+    </div>
+    
+    <h4>Other services</h4>
+  %endif
+  
+  <div class="ADP-services-list">
+    %for HAAdisplay_entry in HAAdisplay_other:
+      ${ HAAdisplay_entry['display_record'].content_as_html() }
+    %endfor
+  </div>
   
   ### Community Housing
   
